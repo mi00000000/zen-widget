@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>一日一禅</title>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: #ffffff;
+            color: #333333;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            background-color: #8ebcab;
+            color: white;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #77a99b;
+        }
+        #zengo {
+            font-size: 28px;
+            font-weight: bold;
+            margin-top: 40px;
+            text-align: center;
+        }
+        #yomi {
+            font-size: 16px;
+            color: #666;
+            margin-top: 5px;
+            text-align: center;
+        }
+        #message {
+            font-size: 18px;
+            margin-top: 30px;
+            text-align: center;
+            max-width: 80%;
+            color: #444;
+        }
+    </style>
+</head>
+<body>
+    <h1>一日一禅</h1>
+    <button onclick="drawQuote()">ひらく</button>
+    <div id="zengo"></div>
+    <div id="yomi"></div>
+    <div id="message"></div>
+
+    <script>
+        let quotes = [];
+
+        async function fetchQuotes() {
+            const response = await fetch('quotes2.csv');
+            const csvText = await response.text();
+
+            const parsed = Papa.parse(csvText, {
+                header: true,
+                skipEmptyLines: true
+            });
+
+            quotes = parsed.data.map(row => ({
+                yomi: row.yomi?.trim(),
+                zengo: row.zengo?.trim(),
+                message: row.message?.trim()
+            }));
+        }
+
+        function drawQuote() {
+            if (quotes.length === 0) return;
+            const randomIndex = Math.floor(Math.random() * quotes.length);
+            const selected = quotes[randomIndex];
+
+            document.getElementById('zengo').innerText = selected.zengo || '';
+            document.getElementById('yomi').innerText = selected.yomi ? `（${selected.yomi}）` : '';
+            document.getElementById('message').innerText = selected.message || '';
+        }
+
+        fetchQuotes();
+    </script>
+</body>
+</html>
