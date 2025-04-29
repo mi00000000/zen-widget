@@ -59,23 +59,43 @@
     <div id="message"></div>
 
     <script>
-        let quotes = [];
-
-        async function fetchQuotes() {
-            const response = await fetch('quotes2.csv');
-            const csvText = await response.text();
-
-            const parsed = Papa.parse(csvText, {
-                header: true,
-                skipEmptyLines: true
-            });
-
-            quotes = parsed.data.map(row => ({
-                yomi: row.yomi?.trim(),
-                zengo: row.zengo?.trim(),
-                message: row.message?.trim()
-            }));
-        }
+        const quotes = [
+        { yomi: "いちごいちえ", zengo: "一期一会", message: "今この瞬間の出会いを、二度とない奇跡として味わおう。" },
+        { yomi: "むしん", zengo: "無心", message: "余計なことは考えず、ただ今に身を委ねてみよう。" },
+        { yomi: "じきしにんしん", zengo: "直指人心", message: "他人の声より、自分の本当の心に耳を傾けよう。" },
+        { yomi: "ふりゅうもんじ", zengo: "不立文字", message: "知識だけじゃない。感じること、体験することを大事にしよう。" },
+        { yomi: "いちにちいっしょう", zengo: "一日一生", message: "今日を最後の日と思って、本気で生きよう。" },
+        { yomi: "ずいしょさしゅ", zengo: "随所作主", message: "どんな場所でも、どんな状況でも、自分の人生の主人公でいよう。" },
+        { yomi: "ほんらいむいちもつ", zengo: "本来無一物", message: "持ち物や肩書きに縛られず、素の自分で生きよう。" },
+        { yomi: "くうそくぜしき", zengo: "空即是色", message: "目に見える世界だけがすべてじゃない。本質を感じ取ろう。" },
+        { yomi: "わけいせいじゃく", zengo: "和敬清寂", message: "誰とでも和を持ち、清らかな心で穏やかに生きよう。" },
+        { yomi: "いちえんそう", zengo: "一円相", message: "完璧を求めず、ありのままの自分を丸ごと受け入れよう。" },
+        { yomi: "かんきゃっか", zengo: "看脚下", message: "遠くを見すぎず、今、自分の立っている場所を大事にしよう。" },
+        { yomi: "はるきたればくさおのずからしょうず", zengo: "春来草自生", message: "無理に頑張らなくてもいい。自然に芽吹くときを信じよう。" },
+        { yomi: "しんげむべっぽう", zengo: "心外無別法", message: "答えは外に探さなくていい。すでにあなたの中にある。" },
+        { yomi: "きっさこ", zengo: "喫茶去", message: "難しいことは置いといて、まず一息つこう。" },
+        { yomi: "みょうじゅたなごころにあり", zengo: "明珠在掌", message: "あなたが探している宝物は、もうすでにあなたの中にある。" },
+        { yomi: "ちそく", zengo: "知足", message: "今あるものに満ち足りる心を持とう。幸せは「もっと」じゃない。" },
+        { yomi: "ふうらいそちく", zengo: "風来疎竹", message: "風が通り抜ける竹のように、しなやかに生きよう。" },
+        { yomi: "むくどく", zengo: "無功徳", message: "見返りを求めず、ただ純粋に行動しよう。" },
+        { yomi: "ずいえん", zengo: "随縁", message: "流れに逆らわず、縁を受け入れて進もう。" },
+        { yomi: "はんしんはんざ", zengo: "半身半座", message: "すぐに完璧を目指さなくていい。半分でも進めばいい。" },
+        { yomi: "ほうげじゃく", zengo: "放下著", message: "いったん全部手放してみよう。重荷を降ろして、身軽に。" },
+        { yomi: "いっけごようをひらく", zengo: "一華開五葉", message: "たった一つの努力から、多くの花が咲いていく。" },
+        { yomi: "じゃくめついらく", zengo: "寂滅為楽", message: "何もない静けさの中に、本当の安らぎがある。" },
+        { yomi: "にちにちこれこうじつ", zengo: "日日是好日", message: "雨でも晴れでも、どんな日もかけがえのない一日。" },
+        { yomi: "りゅうりょくかこう", zengo: "柳緑花紅", message: "あるがままが美しい。無理に飾らなくていい。" },
+        { yomi: "けんこんいってき", zengo: "乾坤一擲", message: "人生ここぞというときは、腹をくくって賭けてみよう。" },
+        { yomi: "むいちもつちゅうむじんぞう", zengo: "無一物中無尽蔵", message: "何も持たない心の中に、無限の可能性が眠っている。" },
+        { yomi: "ざぼう", zengo: "坐忘", message: "ただ座り、すべてを忘れる時間を持とう。" },
+        { yomi: "さんぜさんすいぜすい", zengo: "山是山水是水", message: "山は山、水は水。そのままで完全だ。自分もそう。" },
+        { yomi: "かつざいとうげ", zengo: "活在当下", message: "「今ここ」に生きる。過去も未来も手放して。" },
+        { yomi: "みずきゅうしてつきをながさず", zengo: "水急不月流", message: "激しく流れる川でも、月は揺るがない。心を静かに保とう。" },
+        { yomi: "そうじそくこれしゅぎょう", zengo: "掃地即是修行", message: "小さな日常の一つ一つが、心を磨く道になる。" },
+        { yomi: "ほんらいしょうじょう", zengo: "本来清浄", message: "あなたは最初から、清らかで尊い存在だ。" },
+        { yomi: "こころしずかになればしぜんにすずし", zengo: "心静自然涼", message: "心が静かになれば、世界も涼やかに見える。" },
+        { yomi: "こううんりゅうすい", zengo: "行雲流水", message: "流れる雲、流れる水のように、力まず生きよう。" }
+        ];
 
         function drawQuote() {
             if (quotes.length === 0) return;
